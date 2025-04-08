@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react"; 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Button from "./components/Button";
-import Container from "./components/Container";
+import Navbar from "./components/components/laba2/navbar";
+import Button from "./components/components/laba2/button";
+import Container from "./components/components/laba2/container";
+import LabsPage from "./pages/lab3_pages";
 import "./App.css";
 
 function Home() {
@@ -26,12 +27,15 @@ function About() {
 }
 
 function App() {
+  const [selectedLab, setSelectedLab] = useState(null);
+
   return (
     <Router>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
+        <Route path="/labs" element={<LabsPage />} />
       </Routes>
     </Router>
   );
