@@ -1,9 +1,9 @@
 // src/components/Content.jsx
 import React from "react";
-import { useLocation } from "react-router-dom";  // Для получения текущего пути
+import { useLocation } from "react-router-dom";  //для получения текущего пути
 
 export default function Content() {
-  const location = useLocation();  // Получаем текущий путь
+  const location = useLocation();  //получаю текущий путь
 
   let content;
   switch (location.pathname) {

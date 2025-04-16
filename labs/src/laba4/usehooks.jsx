@@ -1,29 +1,35 @@
 import React, { useState, useEffect } from "react";
 import Container from "D:/React/ssrvp/labs/src/components/components/laba2/container.jsx";
-import Button from "D:/React/ssrvp/labs/src/components/components/laba2/button.jsx";
 
 export default function UseHooksPage() {
   const [count, setCount] = useState(0);
   const [message, setMessage] = useState("Привет!");
 
   useEffect(() => {
-    console.log("Компонент смонтирован!");
-  
     return () => {
       console.log("Компонент размонтирован!");
+      console.log(count)
     };
-  }, []);
-  
+  }, [count]);
+
+  useEffect(() => {
+    console.log("Компонент смонтирован!");
+    console.log(count)
+  }, [count]);
   
   useEffect(() => {
     console.log("Компонент обновился!");
+    // console.log(count)
   }, [count, message]);
   
+  function handleClick(){
+    setCount(count + 1)
+  }
 
   return (
     <Container>
       <h2>useState и useEffect</h2>
-      <button onClick={() => setMessage("Вы нажали кнопку!")}>Изменить сообщение</button>
+      <button onClick={(handleClick)}>Изменить сообщение</button>
       <p>{message}</p>
     </Container>
   );

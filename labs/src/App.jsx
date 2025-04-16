@@ -43,8 +43,6 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/labs" element={<LabsPage />} />
           <Route path="/hooks" element={<UseHooksPage />} />
-          <Route path="/page1" element={<Page1 />} />  
-          <Route path="/page2" element={<Page2 />} />  
           <Route path="/counter" element={<CounterPage />} />
         </Routes>
       </Router>
