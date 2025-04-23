@@ -1,60 +1,36 @@
-import React from "react";
-import AuthForm, { validateEmail } from "D:/React/ssrvp/labs/src/laba5/AuthForm.jsx";
 import { useLoginState } from "D:/React/ssrvp/labs/src/laba5/useLoginState.js";
+import { fetchUserByEmail, registerUser } from "D:/React/ssrvp/labs/src/laba6/api.js";
 
 export function useAuthHandlers() {
   const [isLoggedIn, setIsLoggedIn] = useLoginState();
 
-  const handleLogin = (data) => {
-    const emailValidation = validateEmail(data.email);
-    if (emailValidation !== true) {
-      alert(emailValidation);
+  const handleLogin = async (data) => {
+    const user = await fetchUserByEmail(data.email);
+    if (!user || user.password !== data.password) {
+      alert("Неверный email или пароль");
       return;
     }
-
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const user = users.find(
-      (user) => user.email === data.email && user.password === data.password
-    );
-
-    if (user) {
-      setIsLoggedIn(true);
-      localStorage.setItem("currentUserEmail", data.email);
-    } else {
-      alert("Неверный email или пароль");
-    }
+    localStorage.setItem("currentUserEmail", user.email);
+    localStorage.setItem("currentUserId", user.id);
+    setIsLoggedIn(true);
   };
 
-  const handleRegister = (data) => {
-    const emailValidation = validateEmail(data.email);
-    if (emailValidation !== true) {
-      alert(emailValidation);
-      return;
-    }
-
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const existingUser = users.find((user) => user.email === data.email);
-
+  const handleRegister = async (data) => {
+    const existingUser = await fetchUserByEmail(data.email);
     if (existingUser) {
-      alert("Этот email уже зарегистрирован");
+      alert("Email уже зарегистрирован");
       return;
     }
-
-    const newUser = {
-      email: data.email,
-      password: data.password,
-      feedbacks: [],
-    };
-
-    users.push(newUser);
-    localStorage.setItem("users", JSON.stringify(users));
+    await registerUser({ email: data.email, password: data.password });
     alert("Регистрация успешна! Теперь войдите.");
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
     localStorage.removeItem("currentUserEmail");
+    localStorage.removeItem("currentUserId");
+    setIsLoggedIn(false);
   };
 
   return { isLoggedIn, handleLogin, handleRegister, handleLogout };
 }
+

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import {
   Container,
@@ -8,50 +8,46 @@ import {
   Box,
   List,
   ListItem,
+  IconButton,
+  ListItemText,
+  CircularProgress,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchFeedbacks,
+  submitFeedback,
+  removeFeedback,
+} from "D:/React/ssrvp/labs/src/laba6/feedbackSlice.js";
 
 export default function Feedback() {
+  const dispatch = useDispatch();
+  const { list: feedbacks, loading } = useSelector((state) => state.feedback);
+  const currentUserEmail = useSelector((state) => state.auth.currentUserEmail);
   const { register, handleSubmit, reset } = useForm();
-  const [feedbacks, setFeedbacks] = useState([]);
-  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    const email = localStorage.getItem("currentUserEmail");
-    const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
-    const foundUser = storedUsers.find((user) => user.email === email);
-  
-    if (foundUser) {
-      setCurrentUser(foundUser);
-      setFeedbacks(foundUser.feedbacks || []);
+    if (currentUserEmail) {
+      dispatch(fetchFeedbacks(currentUserEmail));
     }
-  }, []);
+  }, [dispatch, currentUserEmail]);
 
-  const onSubmit = useCallback(
-    (data) => {
-      if (!currentUser) return;
+  const onSubmit = (data) => {
+    if (!currentUserEmail) return;
+    dispatch(submitFeedback({ userEmail: currentUserEmail, message: data.message }));
+    reset();
+  };
 
-      const updatedFeedbacks = [...feedbacks, data.message];
-      setFeedbacks(updatedFeedbacks);
-
-      const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
-
-      const updatedUsers = storedUsers.map((user) =>
-        user.email === currentUser.email
-          ? { ...user, feedbacks: updatedFeedbacks }
-          : user
-      );
-
-      localStorage.setItem("users", JSON.stringify(updatedUsers));
-      reset();
-    },
-    [currentUser, feedbacks, reset]
-  );
+  const handleDelete = (id) => {
+    dispatch(removeFeedback(id));
+  };
 
   return (
     <Container maxWidth="sm">
       <Typography variant="h5" sx={{ mt: 4 }}>
         Форма обратной связи
       </Typography>
+
       <Box component="form" onSubmit={handleSubmit(onSubmit)}>
         <TextField
           fullWidth
@@ -65,11 +61,29 @@ export default function Feedback() {
           Отправить
         </Button>
       </Box>
-      <List>
-        {feedbacks.map((msg, idx) => (
-          <ListItem key={idx}>{msg}</ListItem>
-        ))}
-      </List>
+
+      <Typography variant="h6" sx={{ mt: 4 }}>
+        Мои отзывы
+      </Typography>
+
+      {loading ? (
+        <CircularProgress sx={{ mt: 2 }} />
+      ) : (
+        <List>
+          {feedbacks.map((fb) => (
+            <ListItem
+              key={fb.id}
+              secondaryAction={
+                <IconButton edge="end" onClick={() => handleDelete(fb.id)}>
+                  <DeleteIcon />
+                </IconButton>
+              }
+            >
+              <ListItemText primary={fb.message} />
+            </ListItem>
+          ))}
+        </List>
+      )}
     </Container>
   );
 }
