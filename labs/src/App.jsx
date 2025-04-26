@@ -5,7 +5,6 @@ import Button from "./components/components/laba2/button";
 import Container from "./components/components/laba2/container";
 import LabsPage from "./pages/lab3_pages";
 import { ThemeProvider } from "D:/React/ssrvp/labs/src/laba4/theme_context.jsx";
-import ThemeToggle from "D:/React/ssrvp/labs/src/laba4/theme_toggle.jsx";
 import UseHooksPage from "D:/React/ssrvp/labs/src/laba4/usehooks.jsx"; 
 import CounterPage from "D:/React/ssrvp/labs/src/laba4/counter_page.jsx";
 import AuthForm, { validateEmail } from "D:/React/ssrvp/labs/src/laba5/AuthForm.jsx";
@@ -30,8 +29,8 @@ function Home() {
 function About() {
   return (
     <Container>
-      <h1>2 страница</h1>
-      <p>Как будто бы информация на второй странице сайта</p>
+      <h1>О себе</h1>
+      <p>Ермаков Владимир, 4.205-2</p>
       <Button />
     </Container>
   );
@@ -73,7 +72,7 @@ function App() {
             </MuiButton>
           </Box>
         </Box>
-        <ThemeToggle />
+        
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
