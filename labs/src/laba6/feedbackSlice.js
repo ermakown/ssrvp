@@ -2,8 +2,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getFeedbacks, addFeedback, deleteFeedback } from "D:/React/ssrvp/labs/src/laba6/api.js";
 
 export const fetchFeedbacks = createAsyncThunk("feedback/fetch", async (email) => {
-  const all = await getFeedbacks();
-  return all.filter((f) => f.userEmail === email);
+  const all = await getFeedbacks(email);
+  return all;
 });
 
 export const submitFeedback = createAsyncThunk("feedback/add", async (data) => {

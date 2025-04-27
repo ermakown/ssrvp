@@ -1,5 +1,5 @@
 import React from "react"; 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/components/laba2/navbar";
 import Button from "./components/components/laba2/button";
 import Container from "./components/components/laba2/container";
@@ -7,13 +7,16 @@ import LabsPage from "./pages/lab3_pages";
 import { ThemeProvider } from "D:/React/ssrvp/labs/src/laba4/theme_context.jsx";
 import UseHooksPage from "D:/React/ssrvp/labs/src/laba4/usehooks.jsx"; 
 import CounterPage from "D:/React/ssrvp/labs/src/laba4/counter_page.jsx";
-import AuthForm, { validateEmail } from "D:/React/ssrvp/labs/src/laba5/AuthForm.jsx";
+import AuthForm from "D:/React/ssrvp/labs/src/laba5/AuthForm.jsx";
 import Feedback from "D:/React/ssrvp/labs/src/laba5/Feedback.jsx";
 import ProfileEditor from "D:/React/ssrvp/labs/src/laba6/ProfileEditor.jsx";
 import { Button as MuiButton, Box } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "D:/React/ssrvp/labs/src/laba6/authSlice.js";
 import { Link } from "react-router-dom";
+import AdminPage from "D:/React/ssrvp/labs/src/laba8/AdminPage.jsx";
+import UserList from "D:/React/ssrvp/labs/src/laba8/UserList.jsx";
+import AdminFeedback from "D:/React/ssrvp/labs/src/laba8/AdminFeedback.jsx";
 import "./App.css";
 
 function Home() {
@@ -37,7 +40,7 @@ function About() {
 }
 
 function App() {
-  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { isLoggedIn, currentUserRole } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const handleLogout = () => {
@@ -67,12 +70,17 @@ function App() {
             <MuiButton component={Link} to="/profile" variant="outlined">
               Профиль
             </MuiButton>
+            {currentUserRole === "admin" && (
+              <MuiButton component={Link} to="/admin" variant="outlined" color="success">
+                Админка
+              </MuiButton>
+            )}
             <MuiButton variant="outlined" color="error" onClick={handleLogout}>
               Выйти
             </MuiButton>
           </Box>
         </Box>
-        
+
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
@@ -81,6 +89,18 @@ function App() {
           <Route path="/counter" element={<CounterPage />} />
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/profile" element={<ProfileEditor />} />
+
+          {/* Администрирование (только для админа) */}
+          {currentUserRole === "admin" && (
+            <>
+              <Route path="/admin" element={<AdminPage />} />
+              <Route path="/admin/users" element={<UserList />} />
+              <Route path="/admin/feedbacks" element={<AdminFeedback />} />
+            </>
+          )}
+
+          {/* Если вдруг нет доступа */}
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Router>
     </ThemeProvider>

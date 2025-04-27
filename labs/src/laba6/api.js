@@ -20,10 +20,29 @@ export const updateUser = async (id, updatedData) => {
   return res.data;
 };
 
-// FEEDBACK
-export const getFeedbacks = async () => {
-  const res = await api.get("/feedbacks");
+// USERS (admin panel)
+export const getUsers = async () => {
+  const res = await api.get("/users");
   return res.data;
+};
+
+export const deleteUser = async (id) => {
+  await api.delete(`/users/${id}`);
+};
+
+export const blockUser = async (id, blocked) => {
+  await api.patch(`/users/${id}`, { blocked });
+};
+
+// FEEDBACK
+export const getFeedbacks = async (email = null) => {
+  if (email) {
+    const res = await api.get(`/feedbacks?userEmail=${email}`);
+    return res.data;
+  } else {
+    const res = await api.get("/feedbacks");
+    return res.data;
+  }
 };
 
 export const addFeedback = async (feedbackData) => {
