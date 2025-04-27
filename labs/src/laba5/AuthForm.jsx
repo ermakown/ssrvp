@@ -14,7 +14,7 @@ import { fetchUserByEmail, registerUser } from "D:/React/ssrvp/labs/src/laba6/ap
 
 export const validateEmail = (email) => {
   const re = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$/;
-  return re.test(email) || "Введите нормальный email";
+  return re.test(email) || "Введите корректный email";
 };
 
 export default function AuthForm() {
@@ -30,11 +30,17 @@ export default function AuthForm() {
       return;
     }
 
+    if (user.blocked) {
+      alert("Ваш аккаунт заблокирован. Обратитесь к администратору.");
+      return;
+    }
+
     localStorage.setItem("isLoggedIn", "true");
     localStorage.setItem("currentUserEmail", user.email);
     localStorage.setItem("currentUserId", user.id);
+    localStorage.setItem("currentUserRole", user.role || "user");
 
-    dispatch(login({ email: user.email, id: user.id }));
+    dispatch(login({ email: user.email, id: user.id, role: user.role }));
   };
 
   const handleRegister = async () => {
@@ -46,7 +52,7 @@ export default function AuthForm() {
       return;
     }
 
-    const newUser = await registerUser({ email, password });
+    const newUser = await registerUser({ email, password, role: "user" });
     alert("Регистрация успешна! Теперь войдите.");
   };
 
@@ -78,8 +84,8 @@ export default function AuthForm() {
         />
 
         <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
-        <Button fullWidth variant="contained" onClick={handleSubmit(handleLogin)}>Войти</Button>
-        <Button fullWidth variant="outlined" onClick={handleSubmit(handleRegister)}>Зарегистрироваться</Button>
+          <Button fullWidth variant="contained" onClick={handleSubmit(handleLogin)}>Войти</Button>
+          <Button fullWidth variant="outlined" onClick={handleSubmit(handleRegister)}>Регистрация</Button>
         </Stack>
       </Box>
     </Container>

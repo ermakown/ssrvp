@@ -1,19 +1,17 @@
 {
   "users": [
     {
-      "id": "f59e",
-      "email": "abc@mail.ru",
-      "password": "1234"
+      "id": "1",
+      "email": "admin@mail.ru",
+      "password": "123",
+      "role": "admin"
     },
     {
-      "id": "a390",
-      "email": "user123@mail.ru",
-      "password": "1234"
-    },
-    {
-      "id": "73da",
-      "email": "vova@mail.ru",
-      "password": "1234"
+      "id": "180a",
+      "email": "user1@mail.ru",
+      "password": "123",
+      "role": "user",
+      "blocked": false
     }
   ],
   "feedbacks": []
