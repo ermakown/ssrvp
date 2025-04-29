@@ -21,7 +21,9 @@ const feedbackSlice = createSlice({
     list: [],
     loading: false,
   },
-  reducers: {},
+  reducers: {
+    
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchFeedbacks.pending, (state) => {

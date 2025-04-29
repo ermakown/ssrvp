@@ -17,6 +17,7 @@ import { Link } from "react-router-dom";
 import AdminPage from "D:/React/ssrvp/labs/src/laba8/AdminPage.jsx";
 import UserList from "D:/React/ssrvp/labs/src/laba8/UserList.jsx";
 import AdminFeedback from "D:/React/ssrvp/labs/src/laba8/AdminFeedback.jsx";
+import FeedbackList from "D:/React/ssrvp/labs/src/laba9/FeedbackList.jsx";
 import "./App.css";
 
 function Home() {
@@ -89,6 +90,7 @@ function App() {
           <Route path="/counter" element={<CounterPage />} />
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/profile" element={<ProfileEditor />} />
+          <Route path="/feedbacks" element={<FeedbackList />} />
 
           {/* Администрирование (только для админа) */}
           {currentUserRole === "admin" && (
